@@ -10,7 +10,7 @@
 		"args": { "VARIANT": "16" }
 	},
 	"runArgs":[
-		"--env-file=./devcontainer.env"
+		"--env-file=.devcontainer/devcontainer.env"
 	],
 
 	// Set *default* container specific settings.json values on container create.
