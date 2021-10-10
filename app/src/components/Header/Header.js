@@ -16,19 +16,21 @@ export default function Header() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar>
-                <Toolbar>
+            <AppBar position='static'>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="h5"
                         color="inherit"
                         component="div"
-                        sx={{ flexGrow: 1 }}
+                        sx={{ flexGrow: 1, maxWidth: 120 }}
                         onClick={() => history.push('/')}
                         className='title'>
                         AI Labo
                     </Typography>
-                    <NavMenu to='/face' title='顔認証' icon={<FaceIcon />} />
-                    <NavMenu to='/ocr' title='OCR' icon={<FindInPageIcon />} />
-                    <NavMenu to='/contact' title='お問い合わせ' icon={<EmailIcon />} />
+                    <Box>
+                        <NavMenu to='/face' title='顔認証' icon={<FaceIcon />} />
+                        <NavMenu to='/ocr' title='OCR' icon={<FindInPageIcon />} />
+                        <NavMenu to='/contact' title='お問い合わせ' icon={<EmailIcon />} />
+                    </Box>
                 </Toolbar>
             </AppBar>
         </Box>
