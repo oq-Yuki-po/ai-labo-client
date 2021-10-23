@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import Header from './components/Header/Header';
+import Contact from './components/Contact/Contact';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           OCR
         </Route>
         <Route path="/contact">
-          問合せ
+          <Contact />
         </Route>
         <Route path="/">
           Top
