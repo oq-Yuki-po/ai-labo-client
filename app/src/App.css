@@ -40,3 +40,7 @@
 .title:hover {
   cursor: pointer;
 }
+
+.top-image {
+  opacity: 0.5;
+}

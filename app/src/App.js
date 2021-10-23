@@ -7,6 +7,7 @@ import {
 
 import Header from './components/Header/Header';
 import Contact from './components/Contact/Contact';
+import Top from './components/Top/Top';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Contact />
         </Route>
         <Route path="/">
-          Top
+          <Top />
         </Route>
       </Switch>
     </Router>
