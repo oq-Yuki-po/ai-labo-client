@@ -7,16 +7,41 @@ import Typography from '@mui/material/Typography';
 
 export default function Top() {
     const public_url = process.env.PUBLIC_URL
-    function srcset(image, size, rows = 1, cols = 1) {
+    function srcset(image, width, height, rows = 1, cols = 1) {
         return {
-            src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-            srcSet: `${image}?w=${size * cols}&h=${size * rows
-                }&fit=crop&auto=format&dpr=2 2x`,
+            src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
+            srcSet: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format&dpr=2 2x`,
         };
     }
 
+    function imageLine(imageData, countOfCol, width, height) {
+        return (
+            <ImageList
+                variant="quilted"
+                cols={countOfCol}
+                sx={{ margin: 0.5 }}
+                rowHeight={height}
+            >
+                {imageData.map((item) => (
+                    <ImageListItem key={public_url + item.img} cols={item.cols || 1} rows={item.rows || 1}>
+                        <img
+                            {...srcset(item.img, width, height, item.rows, item.cols)}
+                            alt={item.title}
+                            loading="lazy"
+                            className='top-image'
+                        />
+                    </ImageListItem>
+                ))}
+            </ImageList>
+        );
+    }
+
+    const imageListWidth = '100%'
+
     return (
-        <div>
+        <Box
+            sx={{ width: imageListWidth}}
+        >
             <Typography
                 variant="h1"
                 sx={{
@@ -40,37 +65,16 @@ export default function Top() {
                 ここでは研究成果を実際に動かしてみることができます。<br />
                 ご意見やご感想お待ちしております！！
             </Typography>
-            <Box
-                component="div"
-                sx={{ display: 'flex', flexDirection: 'column', width: 800, mr: 'auto', ml: 'auto' }}
-            >
-
-                <ImageList
-                    variant="quilted"
-                    cols={4}
-
-                >
-                    {itemData.map((item) => (
-                        <ImageListItem key={public_url + item.img} cols={item.cols || 1} rows={item.rows || 1}>
-                            <img
-                                {...srcset(item.img, 121, item.rows, item.cols)}
-                                alt={item.title}
-                                loading="lazy"
-                                className='top-image'
-                            />
-                        </ImageListItem>
-                    ))}
-                </ImageList>
-            </Box>
-        </div>
+            {imageLine(itemData.slice(0, 5), 5, imageListWidth / 5, 850 / 3)}
+            {imageLine(itemData.slice(5, 9), 4, imageListWidth / 4, 850 / 3)}
+            {imageLine(itemData.slice(9, 15), 6, imageListWidth / 6, 850 / 3)}
+        </Box>
     )
 }
 const itemData = [
     {
         img: '/images/sample_01.jpg',
-        title: 'pepper',
-        rows: 2,
-        cols: 2,
+        title: 'pepper'
     },
     {
         img: '/images/sample_02.jpg',
@@ -81,20 +85,52 @@ const itemData = [
         title: 'code'
     },
     {
-        img: '/images/sample_08.jpg',
-        title: 'VR',
-        cols: 2
+        img: '/images/sample_04.jpg',
+        title: 'desk'
     },
     {
-        img: '/images/sample_07.jpg',
-        title: 'drone',
-        rows: 2,
-        cols: 2
+        img: '/images/sample_15.jpg',
+        title: 'dog'
+    },
+    {
+        img: '/images/sample_08.jpg',
+        title: 'VR'
+    },
+    {
+        img: '/images/sample_11.jpg',
+        title: 'machine_learning'
     },
     {
         img: '/images/sample_05.jpg',
-        title: 'face',
-        rows: 2,
-        cols: 2,
+        title: 'face'
     },
+    {
+        img: '/images/sample_06.jpg',
+        title: 'robot'
+    },
+    {
+        img: '/images/sample_09.jpg',
+        title: 'art'
+    },
+    {
+        img: '/images/sample_10.jpg',
+        title: 'robot'
+    },
+    {
+        img: '/images/sample_07.jpg',
+        title: 'drone'
+    },
+    {
+        img: '/images/sample_12.jpg',
+        title: 'brain'
+    },
+    {
+        img: '/images/sample_13.jpg',
+        title: 'earth'
+    },
+    {
+        img: '/images/sample_14.jpg',
+        title: 'robot_hand'
+    },
+    
 ]

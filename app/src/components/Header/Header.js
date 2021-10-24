@@ -15,7 +15,7 @@ export default function Header() {
     let history = useHistory()
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, minHeight: '5vh' }}>
             <AppBar position='static'>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="h5"
