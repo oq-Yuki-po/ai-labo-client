@@ -8,6 +8,7 @@ import {
 import Header from './components/Header/Header';
 import Contact from './components/Contact/Contact';
 import Top from './components/Top/Top';
+import Face from './components/Face/Face';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
       <Header />
       <Switch>
         <Route path="/face">
-          顔認証
+          <Face />
         </Route>
         <Route path="/ocr">
           OCR

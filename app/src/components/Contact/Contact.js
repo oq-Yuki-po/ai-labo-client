@@ -25,7 +25,7 @@ export default function Contact() {
                 variant="h4"
                 sx={{ margin: 2 }}>お問い合わせ</Typography>
             <Typography
-                variant="h6"
+                variant="body1"
                 sx={{ margin: 2 }}>
                 開発中のAIを実際に使ってみた感想や機能要望をお寄せください。<br />
                 また、研究内容に関してのご質問も受け付けております。<br />
