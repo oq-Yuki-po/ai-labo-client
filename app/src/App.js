@@ -15,7 +15,10 @@ function App() {
     <Router>
       <Header />
       <Switch>
-        <Route path="/face">
+        <Route path="/face-recognition">
+          Face Recognition
+        </Route>
+        <Route path="/face-detection">
           <Face />
         </Route>
         <Route path="/ocr">

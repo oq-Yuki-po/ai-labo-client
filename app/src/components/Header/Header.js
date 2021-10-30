@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box'
+import CropFreeIcon from '@mui/icons-material/CropFree';
 import FaceIcon from '@mui/icons-material/Face';
 import EmailIcon from '@mui/icons-material/Email';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
@@ -27,7 +28,8 @@ export default function Header() {
                         AI Labo
                     </Typography>
                     <Box>
-                        <NavMenu to='/face' title='顔認証' icon={<FaceIcon />} />
+                        <NavMenu to='/face-detection' title='顔検出' icon={<CropFreeIcon children={<FaceIcon />}/>} />
+                        <NavMenu to='/face-recognition' title='顔認証' icon={<FaceIcon />} />
                         <NavMenu to='/ocr' title='OCR' icon={<FindInPageIcon />} />
                         <NavMenu to='/contact' title='お問い合わせ' icon={<EmailIcon />} />
                     </Box>
