@@ -32,7 +32,6 @@ export default function Contact() {
                 メールアドレスを入力していただくと、お問い合わせの回答をお送りできます。
             </Typography>
             <TextField label="メールアドレス"
-                floatingLabelText='email'
                 id="outlined-multiline-static"
                 sx={{ margin: 1 }}
                 InputProps={{
