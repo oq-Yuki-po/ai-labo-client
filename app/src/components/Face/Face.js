@@ -23,8 +23,9 @@ const HiddenInput = forwardRef(
     });
 //left-lower,right-lower,right-upper,left-upper
 const resultData = [
-    [[10, 50], [100, 50], [100, 10], [10, 50]],
-    [[200, 150], [250, 150], [250, 50], [200, 50]]
+    [[0, 100], [100, 100], [100, 0], [0, 0]],
+    [[60, 250], [110, 250], [110, 200], [60, 200]],
+    [[250, 250], [350, 250], [250, 150], [350, 150]],
 ];
 
 export default function Face() {
@@ -46,64 +47,49 @@ export default function Face() {
     const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const createImageList = (fileName) => {
-        const canvasEle = canvas.current;
-        canvasEle.width = canvasEle.clientWidth;
-        canvasEle.height = canvasEle.clientHeight;
-
         SetdetectedCount(resultData.length);
         var array = [];
         let promises = [];
-        let reader = new FileReader();
 
-        //Read the contents of Image File.
-        reader.readAsDataURL(fileName);
-        reader.onload = function (e) {
-            for (let key in resultData) {
+        for (let key in resultData) {
 
-                let item = resultData[key];
-                let max_x = Math.max(item[LOWER_LEFT][X], item[LOWER_RIGHT][X], item[UPPER_RIGHT][X], item[UPPER_LEFT][X])
-                let min_x = Math.min(item[LOWER_LEFT][X], item[LOWER_RIGHT][X], item[UPPER_RIGHT][X], item[UPPER_LEFT][X])
+            let item = resultData[key];
+            let max_x = Math.max(item[LOWER_LEFT][X], item[LOWER_RIGHT][X], item[UPPER_RIGHT][X], item[UPPER_LEFT][X])
+            let min_x = Math.min(item[LOWER_LEFT][X], item[LOWER_RIGHT][X], item[UPPER_RIGHT][X], item[UPPER_LEFT][X])
 
-                let max_y = Math.max(item[LOWER_LEFT][Y], item[LOWER_RIGHT][Y], item[UPPER_RIGHT][Y], item[UPPER_LEFT][Y])
-                let min_y = Math.min(item[LOWER_LEFT][Y], item[LOWER_RIGHT][Y], item[UPPER_RIGHT][Y], item[UPPER_LEFT][Y])
+            let max_y = Math.max(item[LOWER_LEFT][Y], item[LOWER_RIGHT][Y], item[UPPER_RIGHT][Y], item[UPPER_LEFT][Y])
+            let min_y = Math.min(item[LOWER_LEFT][Y], item[LOWER_RIGHT][Y], item[UPPER_RIGHT][Y], item[UPPER_LEFT][Y])
 
-                let height = max_y - min_y
-                let width = max_x - min_x
+            let height = max_y - min_y
+            let width = max_x - min_x
 
-                let clip = new Image();
-                
-                
-                clip.src = e.target.result;
-                console.log(parseInt(min_x), parseInt(min_y), parseInt(width), parseInt(height))
-                promises.push(new Promise((resolve) => {
-                    clip.onload = () => {
-                        let promiseSub = new Promise((resolveSub) => {
-                            let tmpCanvas = document.createElement('canvas');
-                            tmpCanvas.width = width;
-                            tmpCanvas.height = height;
-                            let ctx = tmpCanvas.getContext("2d");
-                            console.log("drawImage start");
-                            ctx.drawImage(clip, parseInt(min_x), parseInt(max_y), parseInt(width), parseInt(height),
-                                            0, 0, parseInt(width), parseInt(height));
-                            
-                            console.log("drawImage finish");
-                            resolveSub(tmpCanvas.toDataURL("image/png"));
-                        }).then((val) => {
-                            var obj = { title: `${array.length}`, img: val };
-                            array.push(obj);
-                            console.log("array.push(obj)");
-                            resolve();
-                        });
-                    }
-                }));
-            }
-            console.log(promises);
-            Promise.all(promises).then(() => {
-                SetItemData(array);
-                console.log(array);
-            });
+            let clip = new Image();
 
+            clip.src = fileName;
+            console.log(clip)
+            promises.push(new Promise((resolve) => {
+                clip.onload = function () {
+                    console.log(this.height, this.width)
+
+                    let promiseSub = new Promise((resolveSub) => {
+                        let tmpCanvas = document.createElement('canvas');
+                        tmpCanvas.width = width;
+                        tmpCanvas.height = height;
+                        let ctx = tmpCanvas.getContext("2d");
+                        ctx.drawImage(clip, parseInt(min_x), parseInt(min_y), parseInt(width), parseInt(height),
+                            0, 0, parseInt(width), parseInt(height));
+                        resolveSub(tmpCanvas.toDataURL("image/png"));
+                    }).then((val) => {
+                        var obj = { title: `${array.length}`, img: val };
+                        array.push(obj);
+                        resolve();
+                    });
+                }
+            }));
         }
+        Promise.all(promises).then(() => {
+            SetItemData(array);
+        });
     }
 
     const onFileInputChange = (event) => {
@@ -162,7 +148,7 @@ export default function Face() {
                 ctx.drawImage(image, 0, 0, compressed_width, compressed_height);
             };
         };
-        createImageList(event.target.files[0]);
+
         asyncCall();
     };
 
@@ -170,6 +156,9 @@ export default function Face() {
         await _sleep(2000);
         setProgress(false);
 
+        const canvasEle = canvas.current;
+        createImageList(canvasEle.toDataURL("image/png"));
+        
         // 四角形の描画
         for (let key in resultData) {
             let item = resultData[key]
@@ -182,7 +171,7 @@ export default function Face() {
 
             let height = max_y - min_y
             let width = max_x - min_x
-            ctx.rect(min_x, max_y, width, height);
+            ctx.rect(min_x, min_y, width, height);
         }
 
         ctx.strokeStyle = "red";
@@ -233,21 +222,28 @@ export default function Face() {
                             }
                         </Box>
                     </Box>
-                    <Box sx={{ border: '1px solid black', borderRadius: 2, p: 1, mt: 1, minHeight: 330, background: 'black' }} >
+                    <Box sx={{ border: '1px solid black', borderRadius: 2, p: 1, mt: 1, minHeight: 330 }} >
                         <Typography variant="h6" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
                             検出画像
                         </Typography>
-                        <ImageList variant="standard" rows={1} cols={detectedCount} sx={{ width: detectedCount * 130, height: 300 }} >
+                        <ImageList variant="standard" rows={1} cols={detectedCount} sx={{ width: detectedCount * 150, height: 200 }} >
                             {itemData?.map((item) => (
-                                <ImageListItem key={item.img} rows={1} cols={1} >
-                                    {<img
-                                        src={item.img}
-                                        alt={item.title}
-                                        loading="lazy"
-                                        width={faceRecognitionSideLength}
-                                        height={faceRecognitionSideLength}
-                                    />}
-                                </ImageListItem>
+                                <img
+                                    src={item.img}
+                                    alt={item.title}
+                                    loading="lazy"
+                                    width={faceRecognitionSideLength}
+                                    height={faceRecognitionSideLength}
+                                />
+                                // <ImageListItem key={item.img} rows={1} cols={1} >
+                                //     {<img
+                                //         src={item.img}
+                                //         alt={item.title}
+                                //         loading="lazy"
+                                //         width={faceRecognitionSideLength}
+                                //         height={faceRecognitionSideLength}
+                                //     />}
+                                // </ImageListItem>
                             ))}
                         </ImageList>
                     </Box>
