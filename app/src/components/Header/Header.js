@@ -16,7 +16,7 @@ export default function Header() {
     let history = useHistory()
 
     return (
-        <Box sx={{ flexGrow: 1, minHeight: '5vh' }}>
+        <Box sx={{ flexGrow: 1, minHeight: '7%' }}>
             <AppBar position='static'>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="h5"
@@ -28,7 +28,7 @@ export default function Header() {
                         AI Labo
                     </Typography>
                     <Box>
-                        <NavMenu to='/face-detection' title='顔検出' icon={<CropFreeIcon children={<FaceIcon />}/>} />
+                        <NavMenu to='/face-detection' title='顔検出' icon={<CropFreeIcon children={<FaceIcon />} />} />
                         <NavMenu to='/face-recognition' title='顔認証' icon={<FaceIcon />} />
                         <NavMenu to='/ocr' title='OCR' icon={<FindInPageIcon />} />
                         <NavMenu to='/contact' title='お問い合わせ' icon={<EmailIcon />} />
