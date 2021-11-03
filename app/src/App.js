@@ -10,6 +10,7 @@ import Header from './components/Header/Header';
 import Contact from './components/Contact/Contact';
 import Top from './components/Top/Top';
 import Face from './components/Face/Face';
+import Recognition from './components/Recognition/Recognition';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Header />
         <Switch>
           <Route path="/face-recognition">
-            Face Recognition
+            <Recognition />
           </Route>
           <Route path="/face-detection">
             <Face />
