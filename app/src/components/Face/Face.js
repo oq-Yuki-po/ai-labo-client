@@ -100,7 +100,7 @@ export default function Face() {
                 }).then(function (value) {
                     const canvasEle = canvas.current;
                     const json_body = { image: canvasEle.toDataURL("image/png") };
-                    axios.post('https://localhost/face_detection/', json_body)
+                    axios.post('/api/face_detection/', json_body)
                         .then(res => {
                             console.log(res['data']['bboxes'])
                             let bboxes = res['data']['bboxes']
