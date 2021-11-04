@@ -9,7 +9,8 @@ import Box from '@mui/material/Box'
 import Header from './components/Header/Header';
 import Contact from './components/Contact/Contact';
 import Top from './components/Top/Top';
-import Face from './components/Face/Face';
+import FaceDetectionFromImage from './components/FaceDetection/FaceDetectionFromImage';
+import FaceDetectionFromWebCam from './components/FaceDetection/FaceDetectionFromWebCam';
 import Recognition from './components/Recognition/Recognition';
 
 function App() {
@@ -21,8 +22,11 @@ function App() {
           <Route path="/face-recognition">
             <Recognition />
           </Route>
-          <Route path="/face-detection">
-            <Face />
+          <Route path="/face-detection-image">
+            <FaceDetectionFromImage />
+          </Route>
+          <Route path="/face-detection-webcam">
+            <FaceDetectionFromWebCam/>
           </Route>
           <Route path="/ocr">
             OCR

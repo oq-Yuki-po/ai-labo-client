@@ -12,7 +12,7 @@ import axios from 'axios'
 import { adjustImage } from '../../utils';
 
 
-export default function Face() {
+export default function FaceDetectionFromImage() {
     const faceRecognitionSideLength = 112;
     let ctx = null;
     const canvas = useRef();
