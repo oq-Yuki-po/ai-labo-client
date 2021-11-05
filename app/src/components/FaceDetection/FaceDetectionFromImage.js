@@ -12,6 +12,7 @@ import Drawer from '@mui/material/Drawer';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios'
 import { adjustImage } from '../../utils';
+import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
 
 
 export default function FaceDetectionFromImage() {
@@ -27,27 +28,6 @@ export default function FaceDetectionFromImage() {
     const inputRef = useRef(null);
 
     const description = '画像から顔検出機能を利用できるページです。'
-
-    const [state, setState] = React.useState({ left: false });
-
-    const toggleDrawer = (anchor, open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-
-        setState({ ...state, [anchor]: open });
-    };
-
-    const list = (anchor) => (
-        <Box
-            sx={{ width: 400 }}
-            role="presentation"
-            onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
-        >
-            <DescriptionCard description={description} />
-        </Box>
-    );
 
     const createImageList = (fileName, bboxes) => {
         var array = [];
@@ -156,24 +136,19 @@ export default function FaceDetectionFromImage() {
 
     return (
         <Box sx={{ boxSizing: 'border-box', minHeight: '90%' }}>
+            <Box>
+                <LeftDescriptionDrawer description={description} />
+            </Box>
             <Box sx={{ p: 1, flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
                         <CircularProgress color="primary" size={100} />
                     </Backdrop>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Box>
-                            <React.Fragment key='left'>
-                                <Button onClick={toggleDrawer('left', true)} color="info" startIcon={<InfoIcon />} size='large'>このページについて</Button>
-                                <Drawer anchor='left' open={state['left']} onClose={toggleDrawer('left', false)}>
-                                    {list('left')}
-                                </Drawer>
-                            </React.Fragment>
-                        </Box>
-                        <Box sx={{ position: 'relative' }} m={1}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }} width='50%' height={600} pt={1} m={1}>
+                        <Box sx={{ position: 'relative' }} mb={1}>
                             <canvas ref={canvas} className='canvas' />
                             <Button
-                                sx={{ position: 'absolute', bottom: 15, right: 15 }}
+                                sx={{ position: 'absolute', bottom: 5, right: 20 }}
                                 type="submit"
                                 color="primary"
                                 variant="contained"
@@ -183,34 +158,35 @@ export default function FaceDetectionFromImage() {
                             </Button>
                             <HiddenInput onFileInputChange={onFileInputChange} ref={inputRef} />
                         </Box>
+                        <Box sx={{ border: '1px solid black', borderRadius: 2, minWidth: '40%', height: 150 }} p={2}>
+                            <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
+                                検出結果詳細
+                            </Typography>
+                            {showResultDetail && <React.Fragment>
+                                <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+                                    検出数：{detectedCount}
+                                </Typography>
+                                <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+                                    処理時間：{inferenceTime}（秒）
+                                </Typography>
+                            </React.Fragment>
+                            }
+                        </Box>
                     </Box>
-                    <Box sx={{ p: 1, border: '1px solid black', borderRadius: 2, minWidth: '40%' }} m={1}>
+                    <Box sx={{ border: '1px solid black', borderRadius: 2, width: '50%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
                         <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
-                            検出結果詳細
+                            検出画像
                         </Typography>
-                        {showResultDetail && <React.Fragment>
-                            <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-                                検出数：{detectedCount}
-                            </Typography>
-                            <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-                                処理時間：{inferenceTime}（秒）
-                            </Typography>
-                        </React.Fragment>
+                        {showResultDetail &&
+                            <Box sx={{ display: 'flex', p: 1, m: 1, flexWrap: 'wrap' }}>
+                                {itemData?.map((item, index) => (
+                                    <CroppedFace key={index} based64={item.img} index={item.title} certainty={item.certainty} />
+                                ))}
+                            </Box>
                         }
                     </Box>
                 </Box>
-                <Box sx={{ border: '1px solid black', borderRadius: 2, minHeight: 10 }} mt={2} p={1}>
-                    <Typography variant="h6" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
-                        検出画像
-                    </Typography>
-                    {showResultDetail &&
-                        <Box sx={{ display: 'flex', flexDirection: 'row', p: 1, m: 1, justifyContent: 'flex-start', overflowX: 'scroll' }}>
-                            {itemData?.map((item, index) => (
-                                <CroppedFace key={index} based64={item.img} index={item.title} certainty={item.certainty} />
-                            ))}
-                        </Box>
-                    }
-                </Box>
+
             </Box>
         </Box>
     )
