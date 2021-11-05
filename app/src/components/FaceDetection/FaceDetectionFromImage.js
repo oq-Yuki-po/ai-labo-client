@@ -5,11 +5,8 @@ import Typography from '@mui/material/Typography';
 import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
-import DescriptionCard from '../Common/DescriptionCard';
 import CroppedFace from './CroppedFace'
 import HiddenInput from '../Common/HiddenInput'
-import Drawer from '@mui/material/Drawer';
-import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios'
 import { adjustImage } from '../../utils';
 import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
@@ -144,11 +141,11 @@ export default function FaceDetectionFromImage() {
                     <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
                         <CircularProgress color="primary" size={100} />
                     </Backdrop>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }} width='50%' height={600} pt={1} m={1}>
-                        <Box sx={{ position: 'relative' }} mb={1}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }} height={600} pt={1} m={1}>
+                        <Box sx={{ position: 'relative', display: 'inline-block' }} mb={1}>
                             <canvas ref={canvas} className='canvas' />
                             <Button
-                                sx={{ position: 'absolute', bottom: 5, right: 20 }}
+                                sx={{ position: 'absolute', bottom: 10, right: 10 }}
                                 type="submit"
                                 color="primary"
                                 variant="contained"
@@ -158,7 +155,7 @@ export default function FaceDetectionFromImage() {
                             </Button>
                             <HiddenInput onFileInputChange={onFileInputChange} ref={inputRef} />
                         </Box>
-                        <Box sx={{ border: '1px solid black', borderRadius: 2, minWidth: '40%', height: 150 }} p={2}>
+                        <Box sx={{ border: '1px solid black', borderRadius: 2, height: 150 }} p={2}>
                             <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
                                 検出結果詳細
                             </Typography>
