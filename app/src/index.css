@@ -23,8 +23,8 @@ code {
 }
 
 .canvas-web {
-  width: 640px;
-  height: 480px;
+  width: 768px;
+  height: 432px;
   background-color: #f5f5f5;
   border: 1px solid #000;
   border-radius: 4px;

@@ -118,20 +118,20 @@ export default function FaceDetectionFromWebCam() {
                     videoConstraints={videoConstraints}
                     className='web-cam'
                 />
-                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }} height={400} pt={1} pl={2} m={1}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }} height={500} pt={1} m={1}>
                     <canvas ref={canvas} className='canvas-web' />
-                    <Box>
+                    <Box sx={{ position: 'absolute', bottom: 75, right: 10 }}>
                         <Button
                             variant="contained"
                             onClick={capture}
                             startIcon={<CameraAltIcon />}
-                            sx={{ position: 'absolute', bottom: 10, right: 10 }}
+                            
                         >
                             顔検出
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{ border: '1px solid black', borderRadius: 2, width: '40%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
+                <Box sx={{ border: '1px solid black', borderRadius: 2, width: '50%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
                     <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
                         検出画像
                     </Typography>

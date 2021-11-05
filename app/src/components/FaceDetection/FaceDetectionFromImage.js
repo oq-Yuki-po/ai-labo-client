@@ -136,54 +136,50 @@ export default function FaceDetectionFromImage() {
             <Box>
                 <LeftDescriptionDrawer description={description} />
             </Box>
-            <Box sx={{ p: 1, flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
-                        <CircularProgress color="primary" size={100} />
-                    </Backdrop>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }} height={600} pt={1} m={1}>
-                        <Box sx={{ position: 'relative', display: 'inline-block' }} mb={1}>
-                            <canvas ref={canvas} className='canvas' />
-                            <Button
-                                sx={{ position: 'absolute', bottom: 10, right: 10 }}
-                                type="submit"
-                                color="primary"
-                                variant="contained"
-                                endIcon={<SendIcon />}
-                                onClick={() => { inputRef.current.click(); }}>
-                                画像を送信
-                            </Button>
-                            <HiddenInput onFileInputChange={onFileInputChange} ref={inputRef} />
-                        </Box>
-                        <Box sx={{ border: '1px solid black', borderRadius: 2, height: 150 }} p={2}>
-                            <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
-                                検出結果詳細
-                            </Typography>
-                            {showResultDetail && <React.Fragment>
-                                <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-                                    検出数：{detectedCount}
-                                </Typography>
-                                <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-                                    処理時間：{inferenceTime}（秒）
-                                </Typography>
-                            </React.Fragment>
-                            }
-                        </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
+                    <CircularProgress color="primary" size={100} />
+                </Backdrop>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }} height={600} pt={1} m={1}>
+                    <Box sx={{ position: 'relative', display: 'inline-block' }} mb={1}>
+                        <canvas ref={canvas} className='canvas' />
+                        <Button
+                            sx={{ position: 'absolute', bottom: 10, right: 10 }}
+                            type="submit"
+                            variant="contained"
+                            endIcon={<SendIcon />}
+                            onClick={() => { inputRef.current.click(); }}>
+                            画像を送信
+                        </Button>
+                        <HiddenInput onFileInputChange={onFileInputChange} ref={inputRef} />
                     </Box>
-                    <Box sx={{ border: '1px solid black', borderRadius: 2, width: '50%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
+                    <Box sx={{ border: '1px solid black', borderRadius: 2, height: 150 }} p={2}>
                         <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
-                            検出画像
+                            検出結果詳細
                         </Typography>
-                        {showResultDetail &&
-                            <Box sx={{ display: 'flex', p: 1, m: 1, flexWrap: 'wrap' }}>
-                                {itemData?.map((item, index) => (
-                                    <CroppedFace key={index} based64={item.img} index={item.title} certainty={item.certainty} />
-                                ))}
-                            </Box>
+                        {showResultDetail && <React.Fragment>
+                            <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+                                検出数：{detectedCount}
+                            </Typography>
+                            <Typography variant="h6" sx={{ margin: 1, overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+                                処理時間：{inferenceTime}（秒）
+                            </Typography>
+                        </React.Fragment>
                         }
                     </Box>
                 </Box>
-
+                <Box sx={{ border: '1px solid black', borderRadius: 2, width: '50%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
+                    <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
+                        検出画像
+                    </Typography>
+                    {showResultDetail &&
+                        <Box sx={{ display: 'flex', p: 1, m: 1, flexWrap: 'wrap' }}>
+                            {itemData?.map((item, index) => (
+                                <CroppedFace key={index} based64={item.img} index={item.title} certainty={item.certainty} />
+                            ))}
+                        </Box>
+                    }
+                </Box>
             </Box>
         </Box>
     )
