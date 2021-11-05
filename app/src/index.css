@@ -21,3 +21,18 @@ code {
   border: 1px solid #000;
   border-radius: 4px;
 }
+
+.canvas-web {
+  width: 640px;
+  height: 480px;
+  background-color: #f5f5f5;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.web-cam {
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
