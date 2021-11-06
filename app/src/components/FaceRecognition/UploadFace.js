@@ -5,20 +5,27 @@ import FileUploadIcon from '@mui/icons-material/FileUpload'
 import HiddenInput from '../Common/HiddenInput'
 
 export default function UploadFace(props) {
-    const size = 112 * 2;
     const inputRef = useRef(null);
     
     const fileUpload = () => {
         inputRef.current.click();
     };
 
+    const drawImage = (props) => {
+        if (props.based64 !== "") {
+            return <img src={props.based64} alt={props.title} width={props.size} height={props.size}/>
+        }
+    }
+
     return (
-        <Box textAlign="center" sx={{ m: 1 }}>
-            <img src={props.based64} alt={props.title} width={size} height={size}/>
+        <Box sx={{ m: 10,  display:'inline-block'}}>
+            <Box sx={{ m: 2, border: '1px solid black', borderRadius: 2 }} width={props.size} height={props.size}>
+            {
+                drawImage(props)
+            }
+            </Box>
             <Button
-                sx={{ position: 'absolute', bottom: 0, right: 0 }}
-                type="submit"
-                color="primary"
+                sx={{ m: 1}}
                 variant="contained"
                 endIcon={<FileUploadIcon />}
                 onClick={fileUpload}>

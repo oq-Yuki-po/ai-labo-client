@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import CroppedFace from './CroppedFace'
 import HiddenInput from '../Common/HiddenInput'
+import { useAlert } from "react-alert";
 import axios from 'axios'
 import { adjustImage } from '../../utils';
 import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
@@ -121,7 +122,7 @@ export default function FaceDetectionFromImage() {
                             }
                             )
                         }).catch(error => {
-                            console.log(error)
+                            useAlert.error('顔検出に失敗しました。'+ error.response);
                         }).finally(() => {
                             setProgress(false);
                         });

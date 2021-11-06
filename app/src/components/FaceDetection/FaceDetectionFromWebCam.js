@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
+import { useAlert } from "react-alert";
 import CroppedFace from './CroppedFace'
 import axios from 'axios'
 
@@ -57,8 +58,10 @@ export default function FaceDetectionFromWebCam() {
                             setProgress(false);
                         })
                     }).catch(error => {
-                        console.log(error)
-                    })
+                        useAlert.error('顔検出に失敗しました。'+ error.response);
+                    }).finally(() => {
+                        setProgress(false);
+                    });
             })
         }
     }
@@ -68,6 +71,7 @@ export default function FaceDetectionFromWebCam() {
     }
     const createImageList = (fileName, bboxes) => {
         let promises = [];
+        var array = [];
 
         for (let key in bboxes) {
 
@@ -79,7 +83,6 @@ export default function FaceDetectionFromWebCam() {
             let clip = new Image();
 
             clip.src = fileName;
-
             promises.push(new Promise((resolve) => {
                 clip.onload = function () {
                     new Promise((resolveSub) => {
@@ -92,12 +95,15 @@ export default function FaceDetectionFromWebCam() {
                         resolveSub(tmpCanvas.toDataURL("image/png"));
                     }).then((val) => {
                         var obj = { title: `${itemData.length}`, img: val, certainty: item['certainty'] };
-                        SetItemData([...itemData, obj])
+                        array.push(obj);
                         resolve();
                     });
                 }
             }));
         }
+        Promise.all(promises).then(() => {
+            SetItemData(array);
+        });
     }
 
     return (
@@ -109,29 +115,29 @@ export default function FaceDetectionFromWebCam() {
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
                     <CircularProgress color="primary" size={100} />
                 </Backdrop>
-                <Webcam
-                    audio={false}
-                    height={480}
-                    ref={webcamRef}
-                    screenshotFormat="image/jpeg"
-                    width={640}
-                    videoConstraints={videoConstraints}
-                    className='web-cam'
-                />
+                <Box pt={1} m={1}>
+                    <Webcam
+                        audio={false}
+                        height={480}
+                        ref={webcamRef}
+                        screenshotFormat="image/jpeg"
+                        width={640}
+                        videoConstraints={videoConstraints}
+                    />
+                </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }} height={500} pt={1} m={1}>
                     <canvas ref={canvas} className='canvas-web' />
-                    <Box sx={{ position: 'absolute', bottom: 75, right: 10 }}>
+                    <Box sx={{ position: 'absolute', bottom: 30, right: 10 }}>
                         <Button
                             variant="contained"
                             onClick={capture}
                             startIcon={<CameraAltIcon />}
-                            
                         >
                             顔検出
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{ border: '1px solid black', borderRadius: 2, width: '50%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
+                <Box sx={{ border: '1px solid black', borderRadius: 2, width: '30%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
                     <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
                         検出画像
                     </Typography>
