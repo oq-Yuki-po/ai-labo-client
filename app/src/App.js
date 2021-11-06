@@ -11,7 +11,7 @@ import Contact from './components/Contact/Contact';
 import Top from './components/Top/Top';
 import FaceDetectionFromImage from './components/FaceDetection/FaceDetectionFromImage';
 import FaceDetectionFromWebCam from './components/FaceDetection/FaceDetectionFromWebCam';
-import Recognition from './components/Recognition/Recognition';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Header />
         <Switch>
           <Route path="/face-recognition">
-            <Recognition />
+            <FaceRecognition />
           </Route>
           <Route path="/face-detection-image">
             <FaceDetectionFromImage />

@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import Box from '@mui/material/Box'
-import DescriptionCard from '../Common/DescriptionCard'
+import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
 import UploadFace from './UploadFace'
 
-export default function Recognition() {
+export default function FaceRecognition() {
 
     const description = '顔認証機能をお試しできるページです。\nリリースノート'
 
@@ -16,8 +16,8 @@ export default function Recognition() {
 
     return (
         <Box sx={{ display: 'flex', m: 2, boxSizing: 'border-box', minHeight: '90%' }}>
-            <Box sx={{ minWidth: '18%', mr: 2 }}>
-                <DescriptionCard description={description} />
+            <Box>
+                <LeftDescriptionDrawer description={description} />
             </Box>
             <Box sx={{ minWidth: '80%', display: 'flex', border: '1px solid black', p: 1, borderRadius: 2 }}>
                 <Box
