@@ -26,21 +26,10 @@ export default function FaceDetectionFromImage() {
     const inputRef = useRef(null);
     const reactAlert = useAlert();
 
-    const descriptions = [
-        {
-            title: '説明',
-            description: '画像を使用して、顔検出を行います。\
-                        検出された顔画像はダウンロードでき、顔認証に使用できます。\
-                        このサービスで使用されるモデルは~から実際に搭載されているものです。',
-            tips: [
-                {
-                    text: 'モデル',
-                    description: '機械学習を行わせた評価装置です。<br>AIという表現は正確ではありません。'
-                }
-            ]
-        },
-    ];
-
+    const description = '画像を使用して顔検出を行います。\n' +
+        '検出された顔画像はダウンロードが可能です。\n画像は顔認証に使用できます。\n' +
+        'このサービスで使用されているモデルは~から実際に搭載されているものです。'
+    const caution = '画像はサーバに保存していません。\n気軽にお試しください。'
     const createImageList = (fileName, bboxes) => {
         var array = [];
         let promises = [];
@@ -68,7 +57,6 @@ export default function FaceDetectionFromImage() {
                             0, 0, faceRecognitionSideLength, faceRecognitionSideLength);
                         resolveSub(tmpCanvas.toDataURL("image/png"));
                     }).then((val) => {
-                        console.log(item['certainty'])
                         var obj = { title: `${array.length}`, img: val, certainty: item['certainty'] };
                         array.push(obj);
                         resolve();
@@ -149,7 +137,7 @@ export default function FaceDetectionFromImage() {
     return (
         <Box sx={{ boxSizing: 'border-box', minHeight: '90%' }}>
             <Box>
-                <LeftDescriptionDrawer descriptions={descriptions} />
+                <LeftDescriptionDrawer description={description} caution={caution}/>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>

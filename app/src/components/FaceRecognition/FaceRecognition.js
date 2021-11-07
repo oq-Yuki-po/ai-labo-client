@@ -12,15 +12,9 @@ import axios from 'axios'
 
 export default function FaceRecognition() {
 
-    const descriptions = [
-        {
-            title: '説明',
-            description: '顔認証に使用される機能を使用できます。\
-2つの顔画像をアップロードしその顔の類似度を表示します。\
-顔画像は顔検出ページから生成することができます。',
-            tips: []
-        },
-    ];
+    const description = '2つの顔画像をアップロードして類似度を計算します。\n' +
+        '顔画像は顔検出ページから生成することができます。'
+    const caution = '画像はサーバに保存していません。\n気軽にお試しください。'
     const faceRecognitionSideLength = 112;
     const [similarity, SetSimilarity] = useState(0);
     const [inferenceTime, SetInferenceTime] = useState(0);
@@ -94,7 +88,7 @@ export default function FaceRecognition() {
     return (
         <Box sx={{ boxSizing: 'border-box', minHeight: '90%' }}>
             <Box>
-                <LeftDescriptionDrawer descriptions={descriptions} />
+                <LeftDescriptionDrawer description={description} caution={caution}/>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} height={500}>
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>

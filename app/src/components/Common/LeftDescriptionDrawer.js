@@ -25,7 +25,7 @@ export default function LeftDescriptionDrawer(props) {
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
-            <DescriptionCard descriptions={props.descriptions} />
+            <DescriptionCard description={props.description} caution={props.caution} />
         </Box>
     );
 
