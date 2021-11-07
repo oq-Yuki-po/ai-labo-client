@@ -13,7 +13,21 @@ import axios from 'axios'
 import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
 
 export default function FaceDetectionFromWebCam() {
-    const description = 'WEBカメラを使用して顔検出機能を利用できるページです。'
+    const descriptions = [
+        {
+            title: '説明',
+            description:
+'Webカメラで撮影した画像を使用して、顔検出を行います。\
+検出された顔画像はダウンロードでき、顔認証に使用できます。\
+このサービスで使用されるモデルは~から実際に搭載されているものです。',
+            tips: [
+                {
+                    text: 'モデル',
+                    description: '機械学習を行わせた評価装置です。<br>AIという表現は正確ではありません。'
+                }
+            ]
+        },
+    ];
     const faceRecognitionSideLength = 112;
     let ctx = null;
     const webcamRef = useRef([]);
@@ -40,7 +54,7 @@ export default function FaceDetectionFromWebCam() {
                 resolve();
             }).then(function (value) {
                 const json_body = { image: canvasEle.toDataURL("image/png") };
-                axios.post('http://localhost:8000/api/face_detection/', json_body)
+                axios.post(`${process.env.REACT_APP_SERVER_URL}/api/face_detection/`, json_body)
                     .then(res => {
                         let bboxes = res['data']['bboxes']
 
@@ -109,7 +123,7 @@ export default function FaceDetectionFromWebCam() {
     return (
         <Box sx={{ boxSizing: 'border-box', minHeight: '90%' }}>
             <Box>
-                <LeftDescriptionDrawer description={description} />
+                <LeftDescriptionDrawer descriptions={descriptions} />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>

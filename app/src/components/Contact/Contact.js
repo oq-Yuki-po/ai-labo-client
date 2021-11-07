@@ -29,7 +29,7 @@ export default function Contact() {
             return 0
         }
         const json_body = { mail_address: mailAddress, message: Message };
-        axios.post('http://localhost:8000/api/contact/', json_body)
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/contact/`, json_body)
             .then(res => {
                 
                 reactAlert.info(res['data']['message']);

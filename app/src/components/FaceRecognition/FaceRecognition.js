@@ -12,7 +12,15 @@ import axios from 'axios'
 
 export default function FaceRecognition() {
 
-    const description = '顔認証機能をお試しできるページです。\nリリースノート'
+    const descriptions = [
+        {
+            title: '説明',
+            description: '顔認証に使用される機能を使用できます。\
+2つの顔画像をアップロードしその顔の類似度を表示します。\
+顔画像は顔検出ページから生成することができます。',
+            tips: []
+        },
+    ];
     const faceRecognitionSideLength = 112;
     const [similarity, SetSimilarity] = useState(0);
     const [inferenceTime, SetInferenceTime] = useState(0);
@@ -71,13 +79,13 @@ export default function FaceRecognition() {
             image_01: leftFace,
             image_02: rightFace
         };
-        axios.post('http://localhost:8000/api/face_similarity/', json_body)
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/face_similarity/`, json_body)
             .then(res => {
                 SetSimilarity(res['data']['similarity'])
                 SetInferenceTime(res['data']['predict_time'])
                 setShowResultDetail(true)
             }).catch(error => {
-                reactAlert.error('解析に失敗しました。' + error.response);
+                reactAlert.error('解析に失敗しました。');
             }).finally(() => {
                 setProgress(false);
             });
@@ -86,20 +94,19 @@ export default function FaceRecognition() {
     return (
         <Box sx={{ boxSizing: 'border-box', minHeight: '90%' }}>
             <Box>
-                <LeftDescriptionDrawer description={description} />
+                <LeftDescriptionDrawer descriptions={descriptions} />
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center'}} height={500}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }} height={500}>
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
                     <CircularProgress color="primary" size={100} />
                 </Backdrop>
-                <Box  m={1}>
+                <Box m={1}>
                     <Box sx={{ display: 'flex', p: 1, borderRadius: 2, flexDirection: 'column' }} justify="center" height={400}>
                         <Box sx={{ display: 'flex', border: '1px solid black', p: 1, borderRadius: 2, position: 'relative' }} justify="center" >
                             <UploadFace based64={leftFace} title="Left" onFileInputChange={onFileInputChangeLeft} size={faceRecognitionSideLength} boxSize={150} />
                             <UploadFace based64={rightFace} title="Right" onFileInputChange={onFileInputChangeRight} size={faceRecognitionSideLength} boxSize={150} />
                             <Button
                                 variant="contained"
-                                size="large"
                                 sx={{ position: 'absolute', bottom: 10, right: 10 }}
                                 endIcon={<SendIcon />}
                                 onClick={() => { onSubmit(); }}>
@@ -110,7 +117,7 @@ export default function FaceRecognition() {
                     </Box>
 
                 </Box>
-                <Box sx={{ border: '1px solid black', borderRadius: 2, height: 300, width:250 }} p={2} m={2}>
+                <Box sx={{ border: '1px solid black', borderRadius: 2, height: 300, width: 250 }} p={2} m={2}>
                     <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
                         解析結果詳細
                     </Typography>

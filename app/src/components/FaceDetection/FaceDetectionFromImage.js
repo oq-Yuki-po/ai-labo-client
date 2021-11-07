@@ -24,8 +24,22 @@ export default function FaceDetectionFromImage() {
     const [inferenceTime, SetInferenceTime] = useState(2);
     const [showResultDetail, setShowResultDetail] = useState(false);
     const inputRef = useRef(null);
+    const reactAlert = useAlert();
 
-    const description = '画像から顔検出機能を利用できるページです。'
+    const descriptions = [
+        {
+            title: '説明',
+            description: '画像を使用して、顔検出を行います。\
+                        検出された顔画像はダウンロードでき、顔認証に使用できます。\
+                        このサービスで使用されるモデルは~から実際に搭載されているものです。',
+            tips: [
+                {
+                    text: 'モデル',
+                    description: '機械学習を行わせた評価装置です。<br>AIという表現は正確ではありません。'
+                }
+            ]
+        },
+    ];
 
     const createImageList = (fileName, bboxes) => {
         var array = [];
@@ -101,7 +115,7 @@ export default function FaceDetectionFromImage() {
                 }).then(function (value) {
                     const canvasEle = canvas.current;
                     const json_body = { image: canvasEle.toDataURL("image/png") };
-                    axios.post('http://localhost:8000/api/face_detection/', json_body)
+                    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/face_detection/`, json_body)
                         .then(res => {
                             let bboxes = res['data']['bboxes']
                             SetDetectedCount(res['data']['detected_count'])
@@ -122,7 +136,7 @@ export default function FaceDetectionFromImage() {
                             }
                             )
                         }).catch(error => {
-                            useAlert.error('顔検出に失敗しました。'+ error.response);
+                            reactAlert.error('顔検出に失敗しました。');
                         }).finally(() => {
                             setProgress(false);
                         });
@@ -135,7 +149,7 @@ export default function FaceDetectionFromImage() {
     return (
         <Box sx={{ boxSizing: 'border-box', minHeight: '90%' }}>
             <Box>
-                <LeftDescriptionDrawer description={description} />
+                <LeftDescriptionDrawer descriptions={descriptions} />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
