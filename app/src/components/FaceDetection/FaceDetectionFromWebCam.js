@@ -26,6 +26,8 @@ export default function FaceDetectionFromWebCam() {
         height: 480,
         facingMode: "user"
     };
+    const reactAlert = useAlert();
+
     const [progress, setProgress] = useState(false);
 
     const canvas = useRef();
@@ -61,7 +63,7 @@ export default function FaceDetectionFromWebCam() {
                             setProgress(false);
                         })
                     }).catch(error => {
-                        useAlert.error('顔検出に失敗しました。' + error.response);
+                        reactAlert.error('顔検出に失敗しました。');
                     }).finally(() => {
                         setProgress(false);
                     });
