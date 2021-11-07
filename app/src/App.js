@@ -12,6 +12,7 @@ import Top from './components/Top/Top';
 import FaceDetectionFromImage from './components/FaceDetection/FaceDetectionFromImage';
 import FaceDetectionFromWebCam from './components/FaceDetection/FaceDetectionFromWebCam';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Ocr from './components/Ocr/Ocr';
 
 function App() {
   return (
@@ -26,10 +27,10 @@ function App() {
             <FaceDetectionFromImage />
           </Route>
           <Route path="/face-detection-webcam">
-            <FaceDetectionFromWebCam/>
+            <FaceDetectionFromWebCam />
           </Route>
           <Route path="/ocr">
-            OCR
+            <Ocr />
           </Route>
           <Route path="/contact">
             <Contact />
