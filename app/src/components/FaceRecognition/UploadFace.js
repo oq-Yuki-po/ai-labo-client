@@ -19,7 +19,7 @@ export default function UploadFace(props) {
 
     return (
         <Box sx={{ m: 10,  display:'inline-block'}}>
-            <Box sx={{ m: 2, border: '1px solid black', borderRadius: 2 }} width={props.size} height={props.size}>
+            <Box sx={{ m: 1, border: '1px solid black', borderRadius: 2 }} width={props.size} height={props.size}>
             {
                 drawImage(props)
             }

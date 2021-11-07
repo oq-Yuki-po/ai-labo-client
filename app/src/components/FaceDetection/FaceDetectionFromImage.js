@@ -14,7 +14,7 @@ import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
 
 
 export default function FaceDetectionFromImage() {
-    const faceRecognitionSideLength = 112;
+    const faceRecognitionSideLength = 128;
     let ctx = null;
     const canvas = useRef();
 

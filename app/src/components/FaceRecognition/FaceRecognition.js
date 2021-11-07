@@ -15,7 +15,7 @@ export default function FaceRecognition() {
     const description = '2つの顔画像をアップロードして類似度を計算します。\n' +
         '顔画像は顔検出ページから生成することができます。'
     const caution = '画像はサーバに保存していません。\n気軽にお試しください。'
-    const faceRecognitionSideLength = 112;
+    const faceRecognitionSideLength = 128;
     const [similarity, SetSimilarity] = useState(0);
     const [inferenceTime, SetInferenceTime] = useState(0);
     const [showResultDetail, setShowResultDetail] = useState(false);

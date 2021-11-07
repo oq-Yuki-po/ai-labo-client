@@ -17,7 +17,7 @@ export default function FaceDetectionFromWebCam() {
         '検出された顔画像はダウンロード可能です。\nその画像を顔認証に使用できます。\n' +
         'このサービスで使用されるモデルは~から実際に搭載されているものです。'
     const caution = '画像はサーバに保存していません。\n気軽にお試しください。'
-    const faceRecognitionSideLength = 112;
+    const faceRecognitionSideLength = 128;
     let ctx = null;
     const webcamRef = useRef([]);
     const [itemData, SetItemData] = useState([]);
