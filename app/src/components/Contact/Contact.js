@@ -6,14 +6,37 @@ import InputAdornment from '@mui/material/InputAdornment';
 import EmailIcon from '@mui/icons-material/Email';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
+import axios from 'axios'
+import { useAlert } from "react-alert";
+
 
 export default function Contact() {
     const [isMessageError, setIsMessageError] = useState(false)
     const [helperMessage, setHelperMessage] = useState('')
+    const [mailAddress, setMailAddress] = useState('')
+    const [Message, setMessage] = useState('')
+
+    const reactAlert = useAlert();
 
     function validateMessageLength(length) {
         setIsMessageError(length < 1)
         setHelperMessage(length < 1 ? '1文字以上お書きください' : '')
+    }
+
+    function onClick() {
+        if (isMessageError){
+            reactAlert.info('お問合せ内容が空白です');
+            return 0
+        }
+        const json_body = { mail_address: mailAddress, message: Message };
+        axios.post('http://localhost:8000/api/contact/', json_body)
+            .then(res => {
+                
+                reactAlert.info(res['data']['message']);
+
+            }).catch(error => {
+                reactAlert.error('問合せの送信に失敗しました');
+            })
     }
 
     return (
@@ -41,6 +64,8 @@ export default function Contact() {
                         </InputAdornment>
                     ),
                 }}
+                value={mailAddress}
+                onChange={(evt) => { setMailAddress(evt.target.value) }}
             />
             <TextField
                 error={isMessageError}
@@ -48,10 +73,12 @@ export default function Contact() {
                 label="お問い合わせ内容 *"
                 multiline
                 rows={6}
+                value={Message}
                 sx={{ margin: 1, minHeight: 200 }}
                 helperText={helperMessage}
                 onChange={(evt) => {
                     validateMessageLength(evt.target.value.length)
+                    setMessage(evt.target.value)
                 }}
                 onBlur={(evt) => {
                     validateMessageLength(evt.target.value.length)
@@ -60,11 +87,10 @@ export default function Contact() {
             />{ }
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
-                    type="submit"
-                    color="primary"
                     variant="contained"
                     endIcon={<SendIcon />}
                     sx={{ width: 100, mr: 1 }}
+                    onClick={() => onClick()}
                 >
                     送信
                 </Button>

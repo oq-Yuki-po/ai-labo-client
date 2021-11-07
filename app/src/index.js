@@ -9,7 +9,7 @@ import AlertTemplate from 'react-alert-template-basic'
 
 ReactDOM.render(
   <React.StrictMode>
-    <AlertProvider template={AlertTemplate}>
+    <AlertProvider template={AlertTemplate} timeout={3000}>
       <App />
     </AlertProvider>
   </React.StrictMode>,
