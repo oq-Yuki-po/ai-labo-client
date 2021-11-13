@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useCallback, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Webcam from "react-webcam";
 import Button from '@mui/material/Button';
@@ -11,6 +11,7 @@ import CroppedFace from './CroppedFace'
 import axios from 'axios'
 
 import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
+import CameraSelector from '../Common/CameraSelector';
 
 export default function FaceDetectionFromWebCam() {
     const description = 'Webカメラを使用して顔検出を行います。\n' +
@@ -21,16 +22,38 @@ export default function FaceDetectionFromWebCam() {
     let ctx = null;
     const webcamRef = useRef([]);
     const [itemData, SetItemData] = useState([]);
+    const [progress, setProgress] = useState(false);
+    const [deviceId, setDeviceId] = useState('');
+    const [devices, setDevices] = useState([]);
+
     const videoConstraints = {
         width: 640,
         height: 480,
-        facingMode: "user"
+        facingMode: "user",
+        deviceId: deviceId
     };
     const reactAlert = useAlert();
 
-    const [progress, setProgress] = useState(false);
+
+    const handleDevices = useCallback(
+        mediaDevices =>
+            setDevices(mediaDevices.filter(({ kind }) => kind === "videoinput")),
+        [setDevices]
+    );
+
+    useEffect(
+        () => {
+            navigator.mediaDevices.enumerateDevices().then(handleDevices);
+        },
+        [handleDevices]
+    );
+
+    const handleChange = (event) => {
+        setDeviceId(event.target.value);
+    };
 
     const canvas = useRef();
+
     const drawImage = () => {
         const imageSrc = webcamRef.current.getScreenshot();
         const canvasEle = canvas.current;
@@ -114,25 +137,26 @@ export default function FaceDetectionFromWebCam() {
     return (
         <Box sx={{ boxSizing: 'border-box', minHeight: '90%' }}>
             <Box>
-                <LeftDescriptionDrawer description={description} caution={caution}/>
+                <LeftDescriptionDrawer description={description} caution={caution} />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
                     <CircularProgress color="primary" size={100} />
                 </Backdrop>
-                <Box pt={1} m={1}>
-                    <Webcam
-                        audio={false}
-                        height={480}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                        width={640}
-                        videoConstraints={videoConstraints}
-                    />
+                <Box pt={1} m={1} height={700} width={650}>
+                    <CameraSelector deviceId={deviceId} handleChange={handleChange} devices={devices} />
+                    {(deviceId !== '') &&
+                        <Webcam
+                            audio={false}
+                            ref={webcamRef}
+                            screenshotFormat="image/jpeg"
+                            videoConstraints={videoConstraints}
+                        />}
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }} height={500} pt={1} m={1}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative' }} height={700} width={650} pt={1} m={1}>
+                    <Box height={60}></Box>
                     <canvas ref={canvas} className='canvas-web' />
-                    <Box sx={{ position: 'absolute', bottom: 30, right: 10 }}>
+                    <Box sx={{ position: 'absolute', bottom: 170, right: 10 }}>
                         <Button
                             variant="contained"
                             onClick={capture}
