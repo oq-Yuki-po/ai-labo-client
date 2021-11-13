@@ -94,6 +94,10 @@ export default function FaceDetectionFromWebCam() {
         }
     }
     const capture = () => {
+        if (deviceId==='') {
+            reactAlert.error('カメラを選択してください。');
+            return 0;
+        }
         setProgress(true);
         drawImage()
     }

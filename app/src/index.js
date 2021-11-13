@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
-                                            // react-alert-template-basic
 
 ReactDOM.render(
   <React.StrictMode>

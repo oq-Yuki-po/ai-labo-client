@@ -36,3 +36,7 @@ code {
   left: 0;
   top: 0;
 }
+
+#__react-alert__ div div div {
+  width: 350px !important;
+}
