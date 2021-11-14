@@ -105,7 +105,7 @@ export default function Ocr() {
                 }).then(function (value) {
                     const json_body = { is_recognition: true, image: tmpcanvas.toDataURL("image/png") };
                     // axios.post(`${process.env.REACT_APP_SERVER_URL}/api/ocr/`, json_body)
-                    axios.post(`http://localhost:8000/api/ocr/`, json_body)
+                    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/ocr/`, json_body)
                         .then(res => {
                             const canvasEle = canvas.current;
                             canvasEle.width = canvasEle.clientWidth;
