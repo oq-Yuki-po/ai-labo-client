@@ -11,6 +11,9 @@ import axios from 'axios'
 import LeftDescriptionDrawer from '../Common/LeftDescriptionDrawer';
 import { adjustImage } from '../../utils';
 import ResultTableItem from './ResultTableItem'
+import Modal from '@mui/material/Modal'
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import IconButton from '@mui/material/IconButton';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -34,6 +37,10 @@ export default function Ocr() {
     const [showResultDetail, setShowResultDetail] = useState(false);
     const inputRef = useRef(null);
     const reactAlert = useAlert();
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [modalImageSrc, SetModalImageSrc] = useState('');
 
     const createResultList = (fileName, bboxes) => {
         var array = [];
@@ -114,8 +121,13 @@ export default function Ocr() {
                             let compressed = adjustImage(image_width, image_height, canvasEle.height, canvasEle.width)
                             canvasEle.width = compressed['width'];
                             canvasEle.height = compressed['height'];
-
-                            ctx.drawImage(image, 0, 0, compressed['width'], compressed['height']);
+                            
+                            let resImage = new Image();
+                            resImage.src = 'data:image/png;base64,' + res['data']['image'];
+                            SetModalImageSrc(resImage.src);
+                            resImage.onload = function () {
+                                ctx.drawImage(resImage, 0, 0, compressed['width'], compressed['height']);
+                            }
 
                             let bboxes = res['data']['bboxes']
                             SetRecognitionPredictTime(res['data']['recognition_predict_time'])
@@ -124,6 +136,7 @@ export default function Ocr() {
                                 createResultList(tmpcanvas.toDataURL("image/png"), bboxes);
                                 resolve();
                             })
+                            
                             setShowResultDetail(true)
                         }).catch(error => {
                             reactAlert.error('検出に失敗しました。');
@@ -135,7 +148,6 @@ export default function Ocr() {
         };
 
         document.body.removeChild(tmpcanvas);
-
     };
 
     return (
@@ -148,8 +160,28 @@ export default function Ocr() {
                     <CircularProgress color="primary" size={100} />
                 </Backdrop>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }} height={600} pt={1} m={1}>
-                    <Box sx={{ position: 'relative', display: 'inline-block' }} mb={1}>
+                    <Box sx={{ position: 'relative', display: 'inline-block' }} mb={1} >
+                        <Modal
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={{position: 'absolute',top: '50%', left: '50%', transform: 'translate(-50%, -50%)',boxShadow: 24}}>
+                                <img alt="modalImage" src={modalImageSrc}/>
+                            </Box>
+                        </Modal>                       
                         <canvas ref={canvas} className='canvas' />
+                        <IconButton
+                            sx={{ position: 'absolute', top: 10, right: 10, backgroundColor: "white"}}
+                            variant="contained"
+                            onClick={() => {handleOpen();}}
+                            disabled={!showResultDetail}
+                            size="large"
+                            color="primary"
+                        >
+                            <ZoomInIcon fontSize="inherit"/>
+                        </IconButton>
                         <Button
                             sx={{ position: 'absolute', bottom: 10, right: 10 }}
                             type="submit"
