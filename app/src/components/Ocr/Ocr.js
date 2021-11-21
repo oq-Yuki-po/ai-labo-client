@@ -14,6 +14,9 @@ import ResultTableItem from './ResultTableItem'
 import Modal from '@mui/material/Modal'
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import IconButton from '@mui/material/IconButton';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Tooltip from '@mui/material/Tooltip';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -41,6 +44,11 @@ export default function Ocr() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [modalImageSrc, SetModalImageSrc] = useState('');
+    const [checked, setChecked] = useState(false);
+
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
 
     const createResultList = (fileName, bboxes) => {
         var array = [];
@@ -110,8 +118,7 @@ export default function Ocr() {
                     tmpctx.drawImage(image, 0, 0);
                     resolve();
                 }).then(function (value) {
-                    const json_body = { is_recognition: true, image: tmpcanvas.toDataURL("image/png") };
-                    // axios.post(`${process.env.REACT_APP_SERVER_URL}/api/ocr/`, json_body)
+                    const json_body = { is_recognition: checked, image: tmpcanvas.toDataURL("image/png") };
                     axios.post(`${process.env.REACT_APP_SERVER_URL}/api/ocr/`, json_body)
                         .then(res => {
                             const canvasEle = canvas.current;
@@ -121,7 +128,7 @@ export default function Ocr() {
                             let compressed = adjustImage(image_width, image_height, canvasEle.height, canvasEle.width)
                             canvasEle.width = compressed['width'];
                             canvasEle.height = compressed['height'];
-                            
+
                             let resImage = new Image();
                             resImage.src = 'data:image/png;base64,' + res['data']['image'];
                             SetModalImageSrc(resImage.src);
@@ -136,7 +143,7 @@ export default function Ocr() {
                                 createResultList(tmpcanvas.toDataURL("image/png"), bboxes);
                                 resolve();
                             })
-                            
+
                             setShowResultDetail(true)
                         }).catch(error => {
                             reactAlert.error('検出に失敗しました。');
@@ -159,7 +166,13 @@ export default function Ocr() {
                 <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} className={'drop'} open={progress}>
                     <CircularProgress color="primary" size={100} />
                 </Backdrop>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }} height={600} pt={1} m={1}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }} height={700} pt={1} m={1}>
+                    <Box sx={{ m: 1, p: 1 }}>
+                        <Tooltip title="君にはまだ早い" placement="top" arrow>
+                            <FormControlLabel disabled control={<Checkbox checked={checked} onChange={handleChange} />} label="文字認識も行う"
+                                sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }} />
+                        </Tooltip>
+                    </Box>
                     <Box sx={{ position: 'relative', display: 'inline-block' }} mb={1} >
                         <Modal
                             open={open}
@@ -167,20 +180,23 @@ export default function Ocr() {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={{position: 'absolute',top: '50%', left: '50%', transform: 'translate(-50%, -50%)',boxShadow: 24}}>
-                                <img alt="modalImage" src={modalImageSrc}/>
+                            <Box sx={{
+                                position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', boxShadow: 24,
+                                maxHeight: 3 / 4, maxWidth: 3 / 4
+                            }} overflow="auto">
+                                <img alt="modalImage" src={modalImageSrc} />
                             </Box>
-                        </Modal>                       
+                        </Modal>
                         <canvas ref={canvas} className='canvas' />
                         <IconButton
-                            sx={{ position: 'absolute', top: 10, right: 10, backgroundColor: "white"}}
+                            sx={{ position: 'absolute', top: 10, right: 10, backgroundColor: "white" }}
                             variant="contained"
-                            onClick={() => {handleOpen();}}
+                            onClick={() => { handleOpen(); }}
                             disabled={!showResultDetail}
                             size="large"
                             color="primary"
                         >
-                            <ZoomInIcon fontSize="inherit"/>
+                            <ZoomInIcon fontSize="inherit" />
                         </IconButton>
                         <Button
                             sx={{ position: 'absolute', bottom: 10, right: 10 }}
@@ -207,7 +223,7 @@ export default function Ocr() {
                         }
                     </Box>
                 </Box>
-                <Box sx={{ border: '1px solid black', borderRadius: 2, width: '50%', overflowY: 'scroll', height: 600 }} pt={1} pl={2} m={1}>
+                <Box sx={{ border: '1px solid black', borderRadius: 2, width: '50%', overflowY: 'scroll', height: 700 }} pt={1} pl={2} m={1}>
                     <Typography variant="h5" sx={{ fontFamily: 'Zen Kaku Gothic New', textDecoration: 'underline' }}>
                         認識結果
                     </Typography>
