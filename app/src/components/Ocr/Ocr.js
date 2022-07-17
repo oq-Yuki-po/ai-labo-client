@@ -16,7 +16,6 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import IconButton from '@mui/material/IconButton';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Tooltip from '@mui/material/Tooltip';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -32,6 +31,7 @@ export default function Ocr() {
     const description = '画像を使用して文字認識を行います。\n' +
         'このサービスで使用されているモデルは~から実際に搭載されているものです。'
     const caution = '画像はサーバに保存していません。\n気軽にお試しください。'
+    //const init_json_body = [{ text : "じゅげむじゅげむ　ごこうのすりきれ　かいじゃりすいぎょの　すいぎょうまつうんらいまつふうらいまつ　くうねるところにすむところ　やぶらこうじのぶらこうじ　ぱいぽぱいぽぱいぽのしゅーりんがん　しゅーりんがんのぐーりんだい　ぐーりんだいのぽんぽこぴーのぽんぽこなーの　ちょうきゅうめいのちょうすけ"},{ text : "bbb"},{ text : "ccc"} ]
 
     const [progress, setProgress] = useState(false);
     const [itemData, SetItemData] = useState(null);
@@ -49,8 +49,7 @@ export default function Ocr() {
     const handleChange = (event) => {
         setChecked(event.target.checked);
     };
-
-    const createResultList = (fileName, bboxes) => {
+   /* const createResultList = (fileName, bboxes) => {
         var array = [];
         let promises = [];
 
@@ -86,7 +85,7 @@ export default function Ocr() {
         Promise.all(promises).then(() => {
             SetItemData(array);
         });
-    }
+    }*/
 
     const onFileInputChange = (event) => {
         if (typeof (event.target.files[0]) === "undefined") {
@@ -136,13 +135,20 @@ export default function Ocr() {
                                 ctx.drawImage(resImage, 0, 0, compressed['width'], compressed['height']);
                             }
 
-                            let bboxes = res['data']['bboxes']
+                            let textList = res['data']['text_list']
+                            if(textList.size > 0){
+                                SetItemData(textList)
+                            }else{
+                                SetItemData(null)
+                            }
+
+                            //let bboxes = res['data']['bboxes']
                             SetRecognitionPredictTime(res['data']['recognition_predict_time'])
                             SetDetectionPredictTime(res['data']['detection_predict_time'])
-                            new Promise(function (resolve) {
+                            /*new Promise(function (resolve) {
                                 createResultList(tmpcanvas.toDataURL("image/png"), bboxes);
                                 resolve();
-                            })
+                            })*/
 
                             setShowResultDetail(true)
                         }).catch(error => {
@@ -168,10 +174,8 @@ export default function Ocr() {
                 </Backdrop>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }} height={700} pt={1} m={1}>
                     <Box sx={{ m: 1, p: 1 }}>
-                        <Tooltip title="君にはまだ早い" placement="top" arrow>
-                            <FormControlLabel disabled control={<Checkbox checked={checked} onChange={handleChange} />} label="文字認識も行う"
-                                sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }} />
-                        </Tooltip>
+                        <FormControlLabel control={<Checkbox checked={checked} onChange={handleChange} />} label="文字認識も行う"
+                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }} />
                     </Box>
                     <Box sx={{ position: 'relative', display: 'inline-block' }} mb={1} >
                         <Modal
@@ -232,13 +236,12 @@ export default function Ocr() {
                             <Table aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>検出領域</TableCell>
-                                        <TableCell>認識結果</TableCell>
+                                        <TableCell>文字</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {itemData?.map((item, index) => (
-                                        <ResultTableItem key={index} index={index} based64={item.img} text={item.text} />
+                                        <ResultTableItem key={index} index={index} text={item.text} />
                                     ))}
                                 </TableBody>
                             </Table>

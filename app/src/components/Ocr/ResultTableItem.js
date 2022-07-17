@@ -6,10 +6,7 @@ export default function ResultTableItem(props) {
 
     return (
         <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-            <TableCell component="th" scope="row">
-                <img src={props.based64} alt={props.index} />
-            </TableCell>
-            <TableCell align="right">{props.text}</TableCell>
+            <TableCell align="left">{props.text}</TableCell>
         </TableRow>
     )
 }
