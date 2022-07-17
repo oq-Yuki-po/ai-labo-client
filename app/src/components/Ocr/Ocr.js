@@ -31,7 +31,6 @@ export default function Ocr() {
     const description = '画像を使用して文字認識を行います。\n' +
         'このサービスで使用されているモデルは~から実際に搭載されているものです。'
     const caution = '画像はサーバに保存していません。\n気軽にお試しください。'
-    //const init_json_body = [{ text : "じゅげむじゅげむ　ごこうのすりきれ　かいじゃりすいぎょの　すいぎょうまつうんらいまつふうらいまつ　くうねるところにすむところ　やぶらこうじのぶらこうじ　ぱいぽぱいぽぱいぽのしゅーりんがん　しゅーりんがんのぐーりんだい　ぐーりんだいのぽんぽこぴーのぽんぽこなーの　ちょうきゅうめいのちょうすけ"},{ text : "bbb"},{ text : "ccc"} ]
 
     const [progress, setProgress] = useState(false);
     const [itemData, SetItemData] = useState(null);
@@ -135,7 +134,7 @@ export default function Ocr() {
                                 ctx.drawImage(resImage, 0, 0, compressed['width'], compressed['height']);
                             }
 
-                            let textList = res['data']['text_list']
+                            let textList = res['data']['texts']
                             if(textList.size > 0){
                                 SetItemData(textList)
                             }else{
@@ -241,7 +240,7 @@ export default function Ocr() {
                                 </TableHead>
                                 <TableBody>
                                     {itemData?.map((item, index) => (
-                                        <ResultTableItem key={index} index={index} text={item.text} />
+                                        <ResultTableItem key={index} index={index} text={item} />
                                     ))}
                                 </TableBody>
                             </Table>
